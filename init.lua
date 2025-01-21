@@ -77,7 +77,10 @@ vim.opt.scrolloff = 10
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Diagnostic keymaps
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+vim.keymap.set("n", "<leader>q", function()
+	vim.diagnostic.setloclist({ severity = vim.diagnostic.severity.ERROR })
+end, { desc = "Open diagnostic [Q]uickfix list (Shows only errors)" })
+vim.keymap.set("n", "<leader>qa", vim.diagnostic.setloclist, { desc = "Open [Q]uickfix Messages of [A]ll types" })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
