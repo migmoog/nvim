@@ -327,6 +327,33 @@ require("lazy").setup({
 
 			-- ... and there is more!
 			--  Check out: https://github.com/echasnovski/mini.nvim
+
+			-- autopairs
+			local autopairs = require("mini.pairs")
+			autopairs.config = {
+				modes = { insert = true, command = false, terminal = false },
+				-- Global mappings. Each right hand side should be a pair information, a
+				-- table with at least these fields (see more in |MiniPairs.map|):
+				-- - <action> - one of 'open', 'close', 'closeopen'.
+				-- - <pair> - two character string for pair to be used.
+				-- By default pair is not inserted after `\`, quotes are not recognized by
+				-- `<CR>`, `'` does not insert pair after a letter.
+				-- Only parts of tables can be tweaked (others will use these defaults).
+				mappings = {
+					["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
+					["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
+					["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
+
+					[")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
+					["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
+					["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
+
+					['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^\\].", register = { cr = false } },
+					["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
+					["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\].", register = { cr = false } },
+				},
+			}
+			autopairs.setup()
 		end,
 	},
 	{ -- Highlight, edit, and navigate code
@@ -394,11 +421,6 @@ require("lazy").setup({
 	-- Or use telescope!
 	-- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
 	-- you can continue same window with `<space>sr` which resumes last telescope search
-	{
-		"windwp/nvim-autopairs",
-		event = "InsertEnter",
-		config = true,
-	},
 	require("plugins.plug_nvim-filetree"),
 }, {
 	ui = {
