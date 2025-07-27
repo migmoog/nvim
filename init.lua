@@ -82,22 +82,25 @@ vim.keymap.set("n", "<leader>q", function()
 end, { desc = "Open diagnostic [Q]uickfix list (Shows only errors)" })
 vim.keymap.set("n", "<leader>qa", vim.diagnostic.setloclist, { desc = "Open [Q]uickfix Messages of [A]ll types" })
 
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set("n", "<Tab>h", "<C-w><C-h>", { desc = "Move focus to the left window" })
-vim.keymap.set("n", "<Tab>l", "<C-w><C-l>", { desc = "Move focus to the right window" })
-vim.keymap.set("n", "<Tab>j", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-vim.keymap.set("n", "<Tab>k", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+local hjkl = {
+	["h"] = { direction = "left", split_sizer = ">" },
+	["j"] = { direction = "down", split_sizer = "+" },
+	["k"] = { direction = "up", split_sizer = "-" },
+	["l"] = { direction = "right", split_sizer = "<" },
+}
+for key, rel in pairs(hjkl) do
+	-- split navigation
+	vim.keymap.set(
+		"n",
+		"<Tab>" .. key,
+		"<C-w><C-" .. key .. ">",
+		{ desc = "Move focus to the" .. rel.direction .. "  window" }
+	)
+	-- split sizing
+	vim.keymap.set("n", "<C-Tab>" .. key, "<C-w>" .. rel.split_sizer, { desc = "Stretch window left" .. rel.direction })
+end
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -244,22 +247,6 @@ require("lazy").setup({
 		},
 		opts = {
 			notify_on_error = false,
-			format_on_save = function(bufnr)
-				-- Disable "format_on_save lsp_fallback" for languages that don't
-				-- have a well standardized coding style. You can add additional
-				-- languages here or re-enable it for the disabled ones.
-				local disable_filetypes = { c = true, cpp = true }
-				local lsp_format_opt
-				if disable_filetypes[vim.bo[bufnr].filetype] then
-					lsp_format_opt = "never"
-				else
-					lsp_format_opt = "fallback"
-				end
-				return {
-					timeout_ms = 500,
-					lsp_format = lsp_format_opt,
-				}
-			end,
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
