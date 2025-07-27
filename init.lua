@@ -211,7 +211,7 @@ require("lazy").setup({
 	},
 
 	-- telescope config from kickstart wrapped in a separate file
-	require("plugins.plug_telescope"),
+	require("plugins.telescope"),
 	-- LSP Plugins
 	{
 		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -226,7 +226,7 @@ require("lazy").setup({
 		},
 	},
 
-	require("plugins.plug_nvim-lspconfig"),
+	require("plugins.nvim-lspconfig"),
 
 	{ -- Autoformat
 		"stevearc/conform.nvim",
@@ -271,7 +271,7 @@ require("lazy").setup({
 		},
 	},
 
-	require("plugins.plug_nvim-cmp"),
+	require("plugins.nvim-cmp"),
 
 	{
 		"loctvl842/monokai-pro.nvim",
@@ -421,7 +421,7 @@ require("lazy").setup({
 	-- Or use telescope!
 	-- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
 	-- you can continue same window with `<space>sr` which resumes last telescope search
-	require("plugins.plug_nvim-filetree"),
+	require("plugins.nvim-filetree"),
 }, {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
