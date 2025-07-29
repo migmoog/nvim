@@ -86,8 +86,8 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 
 local hjkl = {
 	["h"] = { direction = "left", split_sizer = ">" },
-	["j"] = { direction = "down", split_sizer = "+" },
-	["k"] = { direction = "up", split_sizer = "-" },
+	["j"] = { direction = "down", split_sizer = "-" },
+	["k"] = { direction = "up", split_sizer = "+" },
 	["l"] = { direction = "right", split_sizer = "<" },
 }
 for key, rel in pairs(hjkl) do
@@ -99,7 +99,7 @@ for key, rel in pairs(hjkl) do
 		{ desc = "Move focus to the" .. rel.direction .. "  window" }
 	)
 	-- split sizing
-	vim.keymap.set("n", "<C-Tab>" .. key, "<C-w>" .. rel.split_sizer, { desc = "Stretch window left" .. rel.direction })
+	vim.keymap.set("n", "<C-Tab>" .. key, "<C-w>" .. rel.split_sizer, { desc = "Stretch window " .. rel.direction })
 end
 
 -- [[ Basic Autocommands ]]
@@ -375,6 +375,7 @@ require("lazy").setup({
 	},
 	require("plugins.nvim-filetree"),
 	require("plugins.typescript-tools"),
+	require("plugins.migcpp")
 }, {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
