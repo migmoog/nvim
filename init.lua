@@ -128,18 +128,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
--- [[ Configure and install plugins ]]
---
---  To check the current status of your plugins, run
---    :Lazy
---
---  You can press `?` in this menu for help. Use `:q` to close the window
---
---  To update plugins you can run
---    :Lazy update
---
--- NOTE: Here is where you install your plugins.
-require("lazy").setup({
+local kickstart_bases = {
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 	-- See `:help gitsigns` to understand what the configuration keys do
@@ -228,9 +217,6 @@ require("lazy").setup({
 			},
 		},
 	},
-
-	require("plugins.nvim-lspconfig"),
-
 	{ -- Autoformat
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
@@ -257,9 +243,6 @@ require("lazy").setup({
 			},
 		},
 	},
-
-	require("plugins.nvim-cmp"),
-
 	{
 		"loctvl842/monokai-pro.nvim",
 		priority = 1000, -- Make sure to load this before all the other start plugins.
@@ -270,7 +253,6 @@ require("lazy").setup({
 			vim.cmd.hi("Comment gui=none")
 		end,
 	},
-
 	-- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
@@ -311,10 +293,6 @@ require("lazy").setup({
 			statusline.section_location = function()
 				return "%2l:%-2v"
 			end
-
-			-- ... and there is more!
-			--  Check out: https://github.com/echasnovski/mini.nvim
-
 			-- autopairs
 			local autopairs = require("mini.pairs")
 			autopairs.config = {
@@ -373,10 +351,9 @@ require("lazy").setup({
 			indent = { enable = true, disable = { "ruby" } },
 		},
 	},
-	require("plugins.nvim-filetree"),
-	require("plugins.typescript-tools"),
-	require("plugins.migcpp")
-}, {
+}
+
+local lazy_opts = {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
 		-- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
@@ -396,4 +373,10 @@ require("lazy").setup({
 			lazy = "💤 ",
 		},
 	},
-})
+}
+
+local all_plugins = {}
+table.insert(all_plugins, kickstart_bases)
+table.insert(all_plugins, require("plugins"))
+
+require("lazy").setup(all_plugins, lazy_opts)
