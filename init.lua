@@ -96,10 +96,10 @@ for key, rel in pairs(hjkl) do
 		"n",
 		"<Tab>" .. key,
 		"<C-w><C-" .. key .. ">",
-		{ desc = "Move focus to the" .. rel.direction .. "  window" }
+		{ desc = "Move focus to the " .. rel.direction .. "  window" }
 	)
 	-- split sizing
-	vim.keymap.set("n", "<C-Tab>" .. key, "<C-w>" .. rel.split_sizer, { desc = "Stretch window " .. rel.direction })
+	vim.keymap.set("n", "<Tab><Tab>" .. key, "<C-w>" .. rel.split_sizer, { desc = "Stretch window " .. rel.direction })
 end
 
 -- [[ Basic Autocommands ]]
