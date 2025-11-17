@@ -69,38 +69,8 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
--- [[ Basic Keymaps ]]
---  See `:help vim.keymap.set()`
-
--- Clear highlights on search when pressing <Esc> in normal mode
---  See `:help hlsearch`
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-
--- -- Diagnostic keymaps
--- vim.keymap.set("n", "<leader>q", function()
--- 	vim.diagnostic.setloclist({ severity = vim.diagnostic.severity.ERROR })
--- end, { desc = "Open diagnostic [Q]uickfix list (Shows only errors)" })
--- vim.keymap.set("n", "<leader>qa", vim.diagnostic.setloclist, { desc = "Open [Q]uickfix Messages of [A]ll types" })
-
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
-local hjkl = {
-	["h"] = { direction = "left", split_sizer = ">" },
-	["j"] = { direction = "down", split_sizer = "-" },
-	["k"] = { direction = "up", split_sizer = "+" },
-	["l"] = { direction = "right", split_sizer = "<" },
-}
-for key, rel in pairs(hjkl) do
-	-- split navigation
-	vim.keymap.set(
-		"n",
-		"<Tab>" .. key,
-		"<C-w><C-" .. key .. ">",
-		{ desc = "Move focus to the " .. rel.direction .. "  window" }
-	)
-	-- split sizing
-	vim.keymap.set("n", "<Tab><Tab>" .. key, "<C-w>" .. rel.split_sizer, { desc = "Stretch window " .. rel.direction })
-end
+-- Do keybindings
+require "keybindings"
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -319,6 +289,17 @@ local kickstart_bases = {
 				},
 			}
 			autopairs.setup()
+
+			local test = require "mini.test"
+			test.setup {}
+			-- Test keybindings
+			vim.keymap.set("n", "<leader>ta", function ()
+				MiniTest.run()
+			end, { desc = "[T]est [a]ll files" })
+
+			vim.keymap.set("n", "<leader>tt", function ()
+				MiniTest.run_file()
+			end, { desc = "[T]est [t]his file"})
 		end,
 	},
 	{ -- Highlight, edit, and navigate code
@@ -376,7 +357,28 @@ local lazy_opts = {
 }
 
 local all_plugins = {}
+local function grab_modules(subdir)
+	local config_path = vim.fn.stdpath("config")
+	local abs_plugin_path = config_path .. "/lua/" .. subdir
+
+	-- using table manipulation because neovim atm can't match without a raw vimscript script
+	local all_files = vim.fn.readdir(abs_plugin_path)
+	local plugin_specs = {}
+
+	for _, v in ipairs(all_files) do
+		-- ignore init or non lua files
+		if v ~= "init.lua" and string.match(v, "^(.+).lua$") then
+			local module_name = string.gsub(v, "%.lua$", "")
+			local plugin = require(subdir .. '.' .. module_name)
+			table.insert(plugin_specs, plugin)
+		end
+	end
+
+	return plugin_specs
+end
+
 table.insert(all_plugins, kickstart_bases)
-table.insert(all_plugins, require("plugins"))
+table.insert(all_plugins, grab_modules "plugins")
+table.insert(all_plugins, grab_modules "local_plugins")
 
 require("lazy").setup(all_plugins, lazy_opts)
