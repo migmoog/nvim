@@ -293,13 +293,13 @@ local kickstart_bases = {
 			local test = require "mini.test"
 			test.setup {}
 			-- Test keybindings
-			vim.keymap.set("n", "<leader>ta", function ()
-				MiniTest.run()
-			end, { desc = "[T]est [a]ll files" })
+			vim.keymap.set("n", "<leader>ta", MiniTest.run, { desc = "[T]est [a]ll files" })
+			vim.keymap.set("n", "<leader>tt", MiniTest.run_file, { desc = "[T]est [t]his file"})
+			vim.keymap.set("n", "<leader>tc", MiniTest.run_at_location, { desc = "[T]est under [c]ursor"})
 
-			vim.keymap.set("n", "<leader>tt", function ()
-				MiniTest.run_file()
-			end, { desc = "[T]est [t]his file"})
+			-- Splitting and joining arguments with `gS`
+			local sj = require "mini.splitjoin"
+			sj.setup()
 		end,
 	},
 	{ -- Highlight, edit, and navigate code
