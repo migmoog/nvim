@@ -30,3 +30,46 @@ for key, rel in pairs(hjkl) do
 	-- split sizing
 	vim.keymap.set("n", "<Tab><Tab>" .. key, "<C-w>" .. rel.split_sizer, { desc = "Stretch window " .. rel.direction })
 end
+
+-- Unit test keybindings, based on language
+for keybind, info in pairs {
+	["<leader>ta"] = {
+		fts = {
+			lua = MiniTest.run,
+			rust = function ()
+				vim.system {"cargo", "test"}
+			end
+		},
+		desc = "[T]est [a]ll files"
+	},
+	["<leader>tt"] = {
+		fts = {
+			lua = MiniTest.run_file,
+			rust = function ()
+				vim.notify("TODO RUST: Testing a specific file")
+			end
+		},
+		desc = "[T]est [t]his file"
+	},
+	["<leader>ta"] = {
+		fts = {
+			lua = MiniTest.run_at_location,
+			rust = function ()
+				vim.notify("TODO RUST: Running the test at the cursor")
+			end
+		},
+		desc = "[T]est under [c]ursor"
+	},
+} do
+	vim.keymap.set("n", keybind, function ()
+		local test_fn = info.fts[vim.bo.filetype]
+		if test_fn then
+			test_fn()
+		else
+			vim.notify(
+				string.format("No way to %s for %s files", info.desc, vim.bo.filetype),
+				vim.log.levels.DEBUG
+			)
+		end
+	end, {desc = info.desc})
+end

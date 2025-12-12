@@ -69,8 +69,6 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
--- Do keybindings
-require "keybindings"
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -292,10 +290,6 @@ local kickstart_bases = {
 
 			local test = require "mini.test"
 			test.setup {}
-			-- Test keybindings
-			vim.keymap.set("n", "<leader>ta", MiniTest.run, { desc = "[T]est [a]ll files" })
-			vim.keymap.set("n", "<leader>tt", MiniTest.run_file, { desc = "[T]est [t]his file"})
-			vim.keymap.set("n", "<leader>tc", MiniTest.run_at_location, { desc = "[T]est under [c]ursor"})
 
 			-- Splitting and joining arguments with `gS`
 			local sj = require "mini.splitjoin"
@@ -382,3 +376,6 @@ table.insert(all_plugins, grab_modules "plugins")
 table.insert(all_plugins, grab_modules "local_plugins")
 
 require("lazy").setup(all_plugins, lazy_opts)
+-- Do keybindings
+require "keybindings"
+
