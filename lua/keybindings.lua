@@ -51,7 +51,7 @@ for keybind, info in pairs {
 		},
 		desc = "[T]est [t]his file"
 	},
-	["<leader>ta"] = {
+	["<leader>tc"] = {
 		fts = {
 			lua = MiniTest.run_at_location,
 			rust = function ()
