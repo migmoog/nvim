@@ -299,7 +299,7 @@ local kickstart_bases = {
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		main = "nvim-treesitter.configs", -- Sets main module to use for opts
+		main = "nvim-treesitter", -- Sets main module to use for opts
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 		opts = {
 			ensure_installed = {
@@ -373,7 +373,9 @@ end
 
 table.insert(all_plugins, kickstart_bases)
 table.insert(all_plugins, grab_modules "plugins")
-table.insert(all_plugins, grab_modules "local_plugins")
+if vim.fn.isdirectory "lua/local_plugins" then
+	table.insert(all_plugins, grab_modules "local_plugins")
+end
 
 require("lazy").setup(all_plugins, lazy_opts)
 -- Do keybindings
