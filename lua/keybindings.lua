@@ -36,29 +36,23 @@ for keybind, info in pairs {
 	["<leader>ta"] = {
 		fts = {
 			lua = MiniTest.run,
-			rust = function ()
-				vim.system {"cargo", "test"}
-			end
+			rust = function () vim.system { "cargo", "test" } end,
 		},
-		desc = "[T]est [a]ll files"
+		desc = "[T]est [a]ll files",
 	},
 	["<leader>tt"] = {
 		fts = {
 			lua = MiniTest.run_file,
-			rust = function ()
-				vim.notify("TODO RUST: Testing a specific file")
-			end
+			rust = function () vim.notify "TODO RUST: Testing a specific file" end,
 		},
-		desc = "[T]est [t]his file"
+		desc = "[T]est [t]his file",
 	},
 	["<leader>tc"] = {
 		fts = {
 			lua = MiniTest.run_at_location,
-			rust = function ()
-				vim.notify("TODO RUST: Running the test at the cursor")
-			end
+			rust = function () vim.notify "TODO RUST: Running the test at the cursor" end,
 		},
-		desc = "[T]est under [c]ursor"
+		desc = "[T]est under [c]ursor",
 	},
 } do
 	vim.keymap.set("n", keybind, function ()
@@ -66,10 +60,7 @@ for keybind, info in pairs {
 		if test_fn then
 			test_fn()
 		else
-			vim.notify(
-				string.format("No way to %s for %s files", info.desc, vim.bo.filetype),
-				vim.log.levels.DEBUG
-			)
+			vim.notify(string.format("No way to %s for %s files", info.desc, vim.bo.filetype), vim.log.levels.DEBUG)
 		end
-	end, {desc = info.desc})
+	end, { desc = info.desc })
 end

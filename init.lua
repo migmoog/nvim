@@ -27,9 +27,7 @@ vim.opt.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-	vim.opt.clipboard = "unnamedplus"
-end)
+vim.schedule(function () vim.opt.clipboard = "unnamedplus" end)
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -69,7 +67,6 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -79,17 +76,15 @@ vim.opt.scrolloff = 10
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank()
-	end,
+	callback = function () vim.highlight.on_yank() end,
 })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+	local out = vim.fn.system { "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath }
 	if vim.v.shell_error ~= 0 then
 		error("Error cloning lazy.nvim:\n" .. out)
 	end
@@ -171,7 +166,7 @@ local kickstart_bases = {
 	},
 
 	-- telescope config from kickstart wrapped in a separate file
-	require("plugins.telescope"),
+	require "plugins.telescope",
 	-- LSP Plugins
 	{
 		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -192,9 +187,7 @@ local kickstart_bases = {
 		keys = {
 			{
 				"<leader>f",
-				function()
-					require("conform").format({ async = true, lsp_format = "fallback" })
-				end,
+				function () require("conform").format { async = true, lsp_format = "fallback" } end,
 				mode = "",
 				desc = "[F]ormat buffer",
 			},
@@ -214,11 +207,11 @@ local kickstart_bases = {
 	{
 		"loctvl842/monokai-pro.nvim",
 		priority = 1000, -- Make sure to load this before all the other start plugins.
-		init = function()
-			vim.cmd.colorscheme("monokai-pro-classic")
+		init = function ()
+			vim.cmd.colorscheme "monokai-pro-classic"
 
 			-- You can configure highlights by doing something like:
-			vim.cmd.hi("Comment gui=none")
+			vim.cmd.hi "Comment gui=none"
 		end,
 	},
 	-- Highlight todo, notes, etc in comments
@@ -231,14 +224,14 @@ local kickstart_bases = {
 
 	{ -- Collection of various small independent plugins/modules
 		"echasnovski/mini.nvim",
-		config = function()
+		config = function ()
 			-- Better Around/Inside textobjects
 			--
 			-- Examples:
 			--  - va)  - [V]isually select [A]round [)]paren
 			--  - yinq - [Y]ank [I]nside [N]ext [Q]uote
 			--  - ci'  - [C]hange [I]nside [']quote
-			require("mini.ai").setup({ n_lines = 500 })
+			require("mini.ai").setup { n_lines = 500 }
 
 			-- Add/delete/replace surroundings (brackets, quotes, etc.)
 			--
@@ -250,19 +243,17 @@ local kickstart_bases = {
 			-- Simple and easy statusline.
 			--  You could remove this setup call if you don't like it,
 			--  and try some other statusline plugin
-			local statusline = require("mini.statusline")
+			local statusline = require "mini.statusline"
 			-- set use_icons to true if you have a Nerd Font
-			statusline.setup({ use_icons = vim.g.have_nerd_font })
+			statusline.setup { use_icons = vim.g.have_nerd_font }
 
 			-- You can configure sections in the statusline by overriding their
 			-- default behavior. For example, here we set the section for
 			-- cursor location to LINE:COLUMN
 			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
+			statusline.section_location = function () return "%2l:%-2v" end
 			-- autopairs
-			local autopairs = require("mini.pairs")
+			local autopairs = require "mini.pairs"
 			autopairs.config = {
 				modes = { insert = true, command = false, terminal = false },
 				-- Global mappings. Each right hand side should be a pair information, a
@@ -351,8 +342,8 @@ local lazy_opts = {
 }
 
 local all_plugins = {}
-local function grab_modules(subdir)
-	local config_path = vim.fn.stdpath("config")
+local function grab_modules (subdir)
+	local config_path = vim.fn.stdpath "config"
 	local abs_plugin_path = config_path .. "/lua/" .. subdir
 
 	-- using table manipulation because neovim atm can't match without a raw vimscript script
@@ -363,7 +354,7 @@ local function grab_modules(subdir)
 		-- ignore init or non lua files
 		if v ~= "init.lua" and string.match(v, "^(.+).lua$") then
 			local module_name = string.gsub(v, "%.lua$", "")
-			local plugin = require(subdir .. '.' .. module_name)
+			local plugin = require(subdir .. "." .. module_name)
 			table.insert(plugin_specs, plugin)
 		end
 	end
@@ -380,4 +371,3 @@ end
 require("lazy").setup(all_plugins, lazy_opts)
 -- Do keybindings
 require "keybindings"
-
