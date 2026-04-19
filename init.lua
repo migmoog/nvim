@@ -291,9 +291,22 @@ local kickstart_bases = {
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		main = "nvim-treesitter", -- Sets main module to use for opts
+		branch = "main",
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 		opts = {
-			ensure_installed = {
+			-- Autoinstall languages that are not installed
+			auto_install = true,
+		},
+
+		init = function ()
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function ()
+					pcall(vim.treesitter.start)
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end
+			})
+
+			local ensure_installed = {
 				"bash",
 				"c",
 				"diff",
@@ -307,15 +320,15 @@ local kickstart_bases = {
 				"vimdoc",
 				"rust",
 				"javascript",
-			},
-			-- Autoinstall languages that are not installed
-			auto_install = true,
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = { "ruby" },
-			},
-			indent = { enable = true, disable = { "ruby" } },
-		},
+			}
+			local already_installed = require('nvim-treesitter.config').get_installed()
+			local parsers_to_install = vim.iter(ensure_installed)
+				:filter(function (parser)
+					return not vim.tbl_contains(already_installed, parser)
+				end)
+				:totable()
+			require('nvim-treesitter').install(parsers_to_install)
+		end,
 	},
 }
 
