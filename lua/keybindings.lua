@@ -5,13 +5,11 @@
 --  See `:help hlsearch`
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
--- -- Diagnostic keymaps
--- vim.keymap.set("n", "<leader>q", function()
--- 	vim.diagnostic.setloclist({ severity = vim.diagnostic.severity.ERROR })
--- end, { desc = "Open diagnostic [Q]uickfix list (Shows only errors)" })
--- vim.keymap.set("n", "<leader>qa", vim.diagnostic.setloclist, { desc = "Open [Q]uickfix Messages of [A]ll types" })
-
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
+-- save shortcuts
+vim.keymap.set({"n", "v"}, "<C-S>", ":w<CR>", {})
+vim.keymap.set({"n", "v"}, "<C-S-S>", ":wa<CR>", {})
 
 local hjkl = {
 	["h"] = { direction = "left", split_sizer = ">" },
