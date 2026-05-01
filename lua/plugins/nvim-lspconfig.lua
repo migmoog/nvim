@@ -132,7 +132,8 @@ return {
 					},
 				},
 			},
-			haxe_language_server = {}
+			haxe_language_server = {},
+			["gdscript-formatter"] = {}
 		}
 
 		-- Ensure the servers and tools above are installed
