@@ -76,5 +76,10 @@ return { -- Collection of various small independent plugins/modules
 		vim.keymap.set("n", "-", MiniFiles.open, {
 			desc = "Open filetree"
 		})
+
+
+		-- moving text
+		local move = require "mini.move"
+		move.setup()
 	end,
 }
