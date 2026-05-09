@@ -115,7 +115,7 @@ return {
 		local servers = {
 			clangd = {},
 			-- gopls = {},
-			pyright = {},
+			pyrefly = {},
 			rust_analyzer = {},
 			ts_ls = {},
 			lua_ls = {
