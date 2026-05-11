@@ -62,3 +62,7 @@ for keybind, info in pairs {
 		end
 	end, { desc = info.desc })
 end
+
+-- saw this in a movie once
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
