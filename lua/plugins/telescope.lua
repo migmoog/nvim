@@ -103,7 +103,15 @@ return { -- Fuzzy Finder (files, lsp, etc)
 			"n",
 			"<leader>sn",
 			function () builtin.find_files { cwd = vim.fn.stdpath "config" } end,
-			{ desc = "[S]earch [N]eovim files" }
+			{ desc = "[S]earch [N]eovim config files" }
+		)
+
+		-- LSP Shortcuts
+		vim.keymap.set(
+			"n",
+			"<leader>re",
+			builtin.lsp_references,
+			{ desc = "Get let of [R][E]ferences for the symbol under the cursor" }
 		)
 	end,
 }
